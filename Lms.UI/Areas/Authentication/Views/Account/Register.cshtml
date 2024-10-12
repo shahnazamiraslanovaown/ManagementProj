@@ -1,0 +1,101 @@
+﻿@using Lms.BusinessLogic.Dtos;
+@model CreatUserDto
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Register | Minia - Minimal Admin & Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- Bootstrap Css -->
+    <link href="~/AdminTemplates/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="~/AdminTemplates/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="~/AdminTemplates/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <div class="w-100 d-flex justify-content-center">
+        <form id="registerForm">
+            <div class="mb-3">
+                <label for="useremail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="user-mail" asp-for="Email" placeholder="Enter email">
+                <div asp-validation-for="Email" class="text-danger"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="first-name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first-name" asp-for="FirstName" placeholder="Enter First Name">
+                <div asp-validation-for="FirstName" class="text-danger"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="last-name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last-name" asp-for="LastName" placeholder="Enter Last Name">
+                <div asp-validation-for="LastName" class="text-danger"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="userpassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" asp-for="Password" placeholder="Enter password">
+                <div asp-validation-for="Password" class="text-danger"></div>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-primary w-100 waves-effect waves-light" type="button" id="btn-register">Register</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/AdminTemplates/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/AdminTemplates/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/AdminTemplates/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/AdminTemplates/libs/node-waves/waves.min.js"></script>
+    <script src="~/AdminTemplates/libs/feather-icons/feather.min.js"></script>
+    <script src="~/AdminTemplates/libs/pace-js/pace.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#btn-register").click(function () {
+                var model = {
+                    Email: $("#user-mail").val(),
+                    FirstName: $("#first-name").val(),
+                    LastName: $("#last-name").val(),
+                    Password: $("#password").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Authentication/Account/Register",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(model),
+                    success: function (response) {
+                        if (response.success) {
+                            console.log(response)
+                        } else {
+                            $("div.text-danger").text("");
+                            $.each(response.errors, function (key, messages) {
+                                var field = $("[asp-for='" + key + "']");
+                                field.next(".text-danger").text(messages[0]);
+                            });
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+
+
+
+</body>
+</html>
